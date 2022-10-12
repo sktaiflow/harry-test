@@ -21,7 +21,7 @@ jobs:
         run: echo "::set-output name=test::hello"
       - id: step2
         run: echo "::set-output name=test::world"
-      - run: echo $PATH
+      - run: echo ${{ github.action_path }}
 
   job2:
     runs-on: ubuntu-latest
@@ -40,26 +40,26 @@ jobs:
       - uses: actions/checkout@v3
         if: ${{ always() }}
 
-      - uses: hashicorp/vault-action@v2.4.1
-        with:
-          url: https://vault-public.sktai.io
-          method: jwt
-          secrets: |
-            kv/data/aidp/aws/account SKTAI_DATAHUB_AWS_ACCESS_KEY_ID | AWS_ACCESS_KEY_ID ;
-            kv/data/aidp/aws/account SKTAI_DATAHUB_AWS_SECRET_ACCESS_KEY | AWS_SECRET_ACCESS_KEY ;
-            kv/data/aidp/gcp/credential CREDENTIAL_JSON | GCP_CREDENTIAL_JSON
-
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-region: ap-northeast-2
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-
-      - run: echo '${{ env.GCP_CREDENTIAL_JSON }}' > mls_stream/gcp_credential.json
-
-      - uses: aws-actions/amazon-ecr-login@v1
-
-      - uses: docker/setup-buildx-action@v1
+#      - uses: hashicorp/vault-action@v2.4.1
+#        with:
+#          url: https://vault-public.sktai.io
+#          method: jwt
+#          secrets: |
+#            kv/data/aidp/aws/account SKTAI_DATAHUB_AWS_ACCESS_KEY_ID | AWS_ACCESS_KEY_ID ;
+#            kv/data/aidp/aws/account SKTAI_DATAHUB_AWS_SECRET_ACCESS_KEY | AWS_SECRET_ACCESS_KEY ;
+#            kv/data/aidp/gcp/credential CREDENTIAL_JSON | GCP_CREDENTIAL_JSON
+#
+#      - uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-region: ap-northeast-2
+#          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+#
+#      - run: echo '${{ env.GCP_CREDENTIAL_JSON }}' > mls_stream/gcp_credential.json
+#
+#      - uses: aws-actions/amazon-ecr-login@v1
+#
+#      - uses: docker/setup-buildx-action@v1
 #
 #      - uses: docker/build-push-action@v3
 #        with:
