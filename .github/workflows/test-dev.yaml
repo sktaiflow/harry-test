@@ -1,0 +1,60 @@
+name: MLS Stream DEV
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - .github/workflows/test-dev.yaml
+      - mls_stream/**
+
+env:
+  mytest: "AAA"
+  if: ${{ success() }}
+
+jobs:
+  setup-build-deploy:
+    name: Setup, Build, and Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: psf/black@stable
+
+      - uses: py-actions/flake8@v2
+
+      - uses: isort/isort-action@master
+
+      - uses: hashicorp/vault-action@v2.4.1
+        with:
+          url: https://vault-public.sktai.io
+          method: jwt
+          secrets: |
+            kv/data/aidp/aws/account SKTAI_DATAHUB_AWS_ACCESS_KEY_ID | AWS_ACCESS_KEY_ID ;
+            kv/data/aidp/aws/account SKTAI_DATAHUB_AWS_SECRET_ACCESS_KEY | AWS_SECRET_ACCESS_KEY ;
+            kv/data/aidp/gcp/credential CREDENTIAL_JSON | GCP_CREDENTIAL_JSON
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ap-northeast-2
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+
+      - run: echo '${{ env.GCP_CREDENTIAL_JSON }}' > mls_stream/gcp_credential.json
+
+      - uses: aws-actions/amazon-ecr-login@v1
+
+      - uses: docker/setup-buildx-action@v1
+#
+#      - uses: docker/build-push-action@v3
+#        with:
+#          build-args: ENV=dev
+#          context: mls_stream
+#          push: true
+#          tags: 393217829091.dkr.ecr.ap-northeast-2.amazonaws.com/mls-stream-dev:latest
+#
+#      - run: aws lambda update-function-code --function-name mls-stream-dev --image-uri 393217829091.dkr.ecr.ap-northeast-2.amazonaws.com/mls-stream-dev:latest
