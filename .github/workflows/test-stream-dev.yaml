@@ -11,7 +11,7 @@ on:
 
 env:
   mytest: "AAA"
-  if: ${{ success() }}
+  if: ${{ always() }}
 
 jobs:
   setup-build-deploy:
