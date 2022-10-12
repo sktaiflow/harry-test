@@ -9,10 +9,6 @@ on:
       - .github/workflows/test-stream-dev.yaml
       - test_stream/**
 
-env:
-  mytest: "AAA"
-  if: ${{ always() }}
-
 jobs:
   setup-build-deploy:
     name: Setup, Build, and Deploy
@@ -23,6 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        if: ${{ always() }}
 
       - uses: psf/black@stable
 
