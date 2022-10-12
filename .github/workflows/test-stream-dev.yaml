@@ -23,7 +23,7 @@ jobs:
       - id: step2
         run: echo "::set-output name=test::world"
       - id: step3
-        run: echo "::set-output name=test::${{ github.action_ref }}"
+        run: echo "::set-output name=test::${{ github.event_path }}"
 
   job2:
     runs-on: ubuntu-latest
