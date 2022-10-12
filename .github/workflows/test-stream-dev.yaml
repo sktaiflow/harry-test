@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - develop
+      - main
     paths:
-      - .github/workflows/test-dev.yaml
-      - mls_stream/**
+      - .github/workflows/test-stream-dev.yaml
+      - test_stream/**
 
 env:
   mytest: "AAA"
