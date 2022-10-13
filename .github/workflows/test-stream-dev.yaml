@@ -22,10 +22,10 @@ jobs:
         run: echo "::set-output name=test::hello"
       - id: step2
         run: echo "::set-output name=test::world"
-        if: ${{ github.ref_name == develop }}
+        if: ${{ github.ref_name == 'develop' }}
       - id: step3
         run: echo "::set-output name=test::${{ github.ref_name }}"
-        if: ${{ github.ref_name == main }}
+        if: ${{ github.ref_name == 'main' }}
 
   job2:
     runs-on: ubuntu-latest
