@@ -14,17 +14,18 @@ jobs:
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:
-      output1: ${{ steps.step1.outputs.test }}
-      output2: ${{ steps.step2.outputs.test }}
-      output3: ${{ steps.step3.outputs.test }}
+      output1: ${{ steps.setenv_dev.outputs.env }}
+      output2: ${{ steps.setenv_stg.outputs.env }}
+      output3: ${{ steps.setenv_prd.outputs.env }}
     steps:
-      - id: step1
-        run: echo "::set-output name=test::hello"
-      - id: step2
-        run: echo "::set-output name=test::world"
+      - id: setenv_dev
+        run: echo "::set-output name=env::dev"
         if: ${{ github.ref_name == 'develop' }}
-      - id: step3
-        run: echo "::set-output name=test::${{ github.ref_name }}"
+      - id: setenv_stg
+        run: echo "::set-output name=env::stg"
+        if: ${{ github.ref_name == 'staging' }}
+      - id: setenv_prd
+        run: echo "::set-output name=env::prd"
         if: ${{ github.ref_name == 'main' }}
 
   job2:
