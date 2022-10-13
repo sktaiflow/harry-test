@@ -17,11 +17,11 @@ jobs:
       env: ${{ env.env }}
     steps:
       - run: echo "env=dev" >> $GITHUB_ENV
-        if: ${{ github.ref_name == "develop" }}
+        if: ${{ github.ref_name == 'develop' }}
       - run: echo "env=stg" >> $GITHUB_ENV
-        if: ${{ github.ref_name == "staging" }}
+        if: ${{ github.ref_name == 'staging' }}
       - run: echo "env=prd" >> $GITHUB_ENV
-        if: ${{ github.ref_name == "main" }}
+        if: ${{ github.ref_name == 'main' }}
 
   job2:
     runs-on: ubuntu-latest
