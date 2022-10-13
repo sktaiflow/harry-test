@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - develop
+      - staging
       - main
     paths:
-      - .github/workflows/test-stream-dev.yaml
+      - .github/workflows/test-stream.yaml
       - test_stream/**
 
 jobs:
@@ -16,11 +17,11 @@ jobs:
       env: ${{ env.env }}
     steps:
       - run: echo "env=dev" >> $GITHUB_ENV
-        if: ${{ github.ref_name == 'develop' }}
+        if: ${{ github.ref_name == "develop" }}
       - run: echo "env=stg" >> $GITHUB_ENV
-        if: ${{ github.ref_name == 'staging' }}
+        if: ${{ github.ref_name == "staging" }}
       - run: echo "env=prd" >> $GITHUB_ENV
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ github.ref_name == "main" }}
 
   job2:
     runs-on: ubuntu-latest
@@ -37,7 +38,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        if: ${{ always() }}
 
 #      - uses: hashicorp/vault-action@v2.4.1
 #        with:
