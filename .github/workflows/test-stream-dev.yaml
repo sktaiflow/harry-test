@@ -12,25 +12,22 @@ on:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    # Map a step output to a job output
-    outputs:
-      output1: ${{ steps.setenv_dev.outputs.env }}
     steps:
       - id: setenv_dev
-        run: echo "::set-output name=env::dev"
+        run: echo "env=dev" >> $GITHUB_ENV
         if: ${{ github.ref_name == 'develop' }}
-      - id: setenv_dev
-        run: echo "::set-output name=env::stg"
+      - id: setenv_stg
+        run: echo "env=stg" >> $GITHUB_ENV
         if: ${{ github.ref_name == 'staging' }}
-      - id: setenv_dev
-        run: echo "::set-output name=env::prd"
+      - id: setenv_prd
+        run: echo "env=prd" >> $GITHUB_ENV
         if: ${{ github.ref_name == 'main' }}
 
   job2:
     runs-on: ubuntu-latest
     needs: job1
     steps:
-      - run: echo ${{needs.job1.outputs.output1}}
+      - run: echo ${{needs.job1.environments.env}}
 
   setup-build-deploy:
     name: Setup, Build, and Deploy
