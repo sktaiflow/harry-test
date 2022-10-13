@@ -12,6 +12,7 @@ on:
 
 jobs:
   setenv:
+    runs-on: ubuntu-latest
     outputs:
       env: ${{ env.env }}
     steps:
