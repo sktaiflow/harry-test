@@ -13,21 +13,20 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
-      - id: setenv_dev
-        run: echo "env=dev" >> $GITHUB_ENV
+      - run: echo "env=dev" >> $GITHUB_ENV
         if: ${{ github.ref_name == 'develop' }}
-      - id: setenv_stg
-        run: echo "env=stg" >> $GITHUB_ENV
+      - run: echo "env=stg" >> $GITHUB_ENV
         if: ${{ github.ref_name == 'staging' }}
-      - id: setenv_prd
-        run: echo "env=prd" >> $GITHUB_ENV
+      - run: echo "env=prd" >> $GITHUB_ENV
         if: ${{ github.ref_name == 'main' }}
 
   job2:
     runs-on: ubuntu-latest
     needs: job1
     steps:
-      - run: echo ${{needs.job1.env.env}}
+      - run: echo "env=prd" >> $GITHUB_ENV
+        if: ${{ github.ref_name == 'main' }}
+      - run: echo ${{env.env}}
 
   setup-build-deploy:
     name: Setup, Build, and Deploy
